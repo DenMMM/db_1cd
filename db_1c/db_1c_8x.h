@@ -70,7 +70,7 @@ records
    check it before access to fields.
 
 table
-   In this version desribes parameters only: name, set of fileds and data
+   In this version desribes parameters only: name, set of fields and data
    objects.
 
 root
@@ -112,9 +112,9 @@ public:
     class exception : public std::runtime_error
     {
     public:
-        exception(const std::string& what_arg) : std::runtime_error(what_arg) {}
-        exception(const char* what_arg) : std::runtime_error(what_arg) {}
-        exception(const runtime_error& other) noexcept : std::runtime_error(other) {}
+        explicit exception(const std::string& what_arg) : std::runtime_error(what_arg) {}
+        explicit exception(const char* what_arg) : std::runtime_error(what_arg) {}
+        explicit exception(const exception& other) noexcept = default;
     };
 
 
@@ -194,10 +194,11 @@ public:
             LAST
         };
 
-        class error : public file::error
+        class error
         {
         private:
             errors mycode;                                  // Pages opening error code.
+            file::error file_error;                         // Filesystem level error.
 
         public:
             errors code() const noexcept
@@ -217,7 +218,7 @@ public:
 
             error(const file::error& fe_) :
                 mycode(errors::file_system),
-                file::error(fe_)
+                file_error(fe_)
             {
             }
 

@@ -182,7 +182,7 @@ namespace cache
 
         bool item_is_top(iterator i_item_) const noexcept
         {
-            return i_item_ == items.end() - 1;
+            return i_item_ == (items.end() - 1);
         }
 
         iterator item_move_top(iterator i_item_)

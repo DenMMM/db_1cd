@@ -129,7 +129,7 @@ std::string db_1c_8x::pages::error::to_string() const
     switch (mycode)
     {
     case errors::none:                  return "";
-    case errors::file_system:           return file::error::to_string();
+    case errors::file_system:           return file_error.to_string();
     case errors::bad_file:              return "Wrong file format.";
     case errors::version:               return "Unsupported version.";
     default:
