@@ -9,5 +9,5 @@ While development used additional resources:
 * https://github.com/madler/zlib
 
 
-Часть мини-драйвера для чтения файловой базы 1С8.
+Часть мини-драйвера для чтения файловой базы 1СD.
 Поддерживается формат версии 8.3.8.
