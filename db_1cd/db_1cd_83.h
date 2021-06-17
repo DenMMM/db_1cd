@@ -1,5 +1,5 @@
 /*
-   Library for low-level access to 1C8 file database.
+   Library for low-level access to 1CD file database.
    Copyright (C) 2021 Denis Matveev (denm.mmm@gmail.com).
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,13 +21,13 @@
 #include <cassert>
 #include <typeinfo>
 
-#include "db_1c_8x.h"
+#include "db_1cd_8x.h"
 
 
-class db_1c_83 : public db_1c_8x
+class db_1cd_83 : public db_1cd_8x
 {
 public:
-    db_1c_83() = delete;
+    db_1cd_83() = delete;
 
 
 public:
@@ -81,11 +81,11 @@ public:
     };
 
 
-    using blob = db_1c_8x::blob<object>;
-    using records = db_1c_8x::records<object>;
+    using blob = db_1cd_8x::blob<object>;
+    using records = db_1cd_8x::records<object>;
 
 
-    class root : public db_1c_8x::root
+    class root : public db_1cd_8x::root
     {
     public:
         using index_type = std::uint32_t;                   // 'root_hdr::numtables'.

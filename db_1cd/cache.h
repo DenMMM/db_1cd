@@ -1,5 +1,5 @@
 /*
-   Library for low-level access to 1C8 file database.
+   Library for low-level access to 1CD file database.
    Copyright (C) 2021 Denis Matveev (denm.mmm@gmail.com).
 
    Licensed under the Apache License, Version 2.0 (the "License");

@@ -1,5 +1,5 @@
 /*
-   Library for low-level access to 1C8 file database.
+   Library for low-level access to 1CD file database.
    Copyright (C) 2021 Denis Matveev (denm.mmm@gmail.com).
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,10 +18,10 @@
 #include <utility>
 #include <regex>
 
-#include "db_1c_8x.h"
+#include "db_1cd_8x.h"
 
 
-std::string db_1c_8x::file::error::to_string() const
+std::string db_1cd_8x::file::error::to_string() const
 {
     std::string result(1024, ' ');
     
@@ -37,8 +37,8 @@ std::string db_1c_8x::file::error::to_string() const
 }
 
 
-db_1c_8x::file::error
-db_1c_8x::file::open(const std::wstring &path_name_)
+db_1cd_8x::file::error
+db_1cd_8x::file::open(const std::wstring &path_name_)
 {
     assert(!is_valid());                                    // File already opened.
 
@@ -69,8 +69,8 @@ db_1c_8x::file::open(const std::wstring &path_name_)
 }
 
 
-db_1c_8x::file::error
-db_1c_8x::file::read(void* dst_buff_, std::size_t count_, file::size_type pos_) const
+db_1cd_8x::file::error
+db_1cd_8x::file::read(void* dst_buff_, std::size_t count_, file::size_type pos_) const
 {
     assert(is_valid());                                     // File not opened.
 
@@ -99,8 +99,8 @@ db_1c_8x::file::read(void* dst_buff_, std::size_t count_, file::size_type pos_) 
 }
 
 
-db_1c_8x::file::error
-db_1c_8x::file::close()
+db_1cd_8x::file::error
+db_1cd_8x::file::close()
 {
     assert(is_valid());                                     // File not opened.
 
@@ -115,7 +115,7 @@ db_1c_8x::file::close()
 }
 
 
-db_1c_8x::file::~file()
+db_1cd_8x::file::~file()
 {
     if (file_handle != INVALID_HANDLE_VALUE)
     {
@@ -124,7 +124,7 @@ db_1c_8x::file::~file()
 }
 
 
-std::string db_1c_8x::pages::error::to_string() const
+std::string db_1cd_8x::pages::error::to_string() const
 {
     switch (mycode)
     {
@@ -139,7 +139,7 @@ std::string db_1c_8x::pages::error::to_string() const
 }
 
 
-void db_1c_8x::pages::cache_init(std::size_t page_size_)
+void db_1cd_8x::pages::cache_init(std::size_t page_size_)
 {
     cache_data.clear();
     cache_pool.clear();
@@ -156,8 +156,8 @@ void db_1c_8x::pages::cache_init(std::size_t page_size_)
 }
 
 
-db_1c_8x::pages::error
-db_1c_8x::pages::open(const std::wstring& path_name_)
+db_1cd_8x::pages::error
+db_1cd_8x::pages::open(const std::wstring& path_name_)
 {
     assert(!is_valid());                                    // File already opened.
 
@@ -213,7 +213,7 @@ db_1c_8x::pages::open(const std::wstring& path_name_)
 }
 
 
-const void* db_1c_8x::pages::view(
+const void* db_1cd_8x::pages::view(
     pages::index_type index_,
     std::size_t count_, std::size_t pos_)
 {
@@ -276,7 +276,7 @@ const void* db_1c_8x::pages::view(
 }
 
 
-db_1c_8x::pages::buffer_type db_1c_8x::blob_base::decompress(
+db_1cd_8x::pages::buffer_type db_1cd_8x::blob_base::decompress(
     const pages::buffer_type& src_, std::size_t max_size_)
 {
     pages::buffer_type dst;
@@ -365,7 +365,7 @@ db_1c_8x::pages::buffer_type db_1c_8x::blob_base::decompress(
 }
 
 
-std::wstring db_1c_8x::blob_base::utf8to16(const pages::buffer_type& src_)
+std::wstring db_1cd_8x::blob_base::utf8to16(const pages::buffer_type& src_)
 {
     std::size_t src_size = src_.size();
 
@@ -420,7 +420,7 @@ std::wstring db_1c_8x::blob_base::utf8to16(const pages::buffer_type& src_)
 }
 
 
-db_1c_8x::field::binary::binary(
+db_1cd_8x::field::binary::binary(
     const fparams& params_, const void* buff_, std::size_t size_) :
     any(params_)
 {
@@ -434,7 +434,7 @@ db_1c_8x::field::binary::binary(
 }
 
 
-db_1c_8x::field::boolean::boolean(
+db_1cd_8x::field::boolean::boolean(
     const fparams& params_, const void* buff_, std::size_t size_) :
     any(params_)
 {
@@ -444,7 +444,7 @@ db_1c_8x::field::boolean::boolean(
 }
 
 
-db_1c_8x::field::digit::digit(
+db_1cd_8x::field::digit::digit(
     const fparams& params_, const void* buff_, std::size_t size_) :
     any(params_)
 {
@@ -458,7 +458,7 @@ db_1c_8x::field::digit::digit(
 }
 
 
-db_1c_8x::field::str_fix::str_fix(
+db_1cd_8x::field::str_fix::str_fix(
     const fparams& params_, const void* buff_, std::size_t size_) :
     any(params_)
 {
@@ -472,7 +472,7 @@ db_1c_8x::field::str_fix::str_fix(
 }
 
 
-db_1c_8x::field::str_var::str_var(
+db_1cd_8x::field::str_var::str_var(
     const fparams& params_, const void* buff_, std::size_t size_) :
     any(params_)
 {
@@ -495,7 +495,7 @@ db_1c_8x::field::str_var::str_var(
 }
 
 
-db_1c_8x::field::version::version(
+db_1cd_8x::field::version::version(
     const fparams& params_, const void* buff_, std::size_t size_) :
     any(params_)
 {
@@ -511,7 +511,7 @@ db_1c_8x::field::version::version(
 }
 
 
-db_1c_8x::field::str_blob::str_blob(
+db_1cd_8x::field::str_blob::str_blob(
     const fparams& params_, const void* buff_, std::size_t size_) :
     any(params_)
 {
@@ -525,7 +525,7 @@ db_1c_8x::field::str_blob::str_blob(
 }
 
 
-db_1c_8x::field::bin_blob::bin_blob(
+db_1cd_8x::field::bin_blob::bin_blob(
     const fparams& params_, const void* buff_, std::size_t size_) :
     any(params_)
 {
@@ -539,7 +539,7 @@ db_1c_8x::field::bin_blob::bin_blob(
 }
 
 
-db_1c_8x::field::datetime::datetime(
+db_1cd_8x::field::datetime::datetime(
     const fparams& params_, const void* buff_, std::size_t size_) :
     any(params_)
 {
@@ -557,7 +557,7 @@ db_1c_8x::field::datetime::datetime(
 }
 
 
-std::wstring db_1c_8x::root::parse_name(const std::wstring& descr_)
+std::wstring db_1cd_8x::root::parse_name(const std::wstring& descr_)
 {
     const auto i_end = std::wsregex_iterator();
 
@@ -578,8 +578,8 @@ std::wstring db_1c_8x::root::parse_name(const std::wstring& descr_)
 }
 
 
-std::vector<db_1c_8x::field::fparams>
-    db_1c_8x::root::parse_fields(const std::wstring& descr_)
+std::vector<db_1cd_8x::field::fparams>
+    db_1cd_8x::root::parse_fields(const std::wstring& descr_)
 {
     const auto i_end = std::wsregex_iterator();
     thread_local const std::wregex rgxp_fields(L"^\\{\"[^\"]+\",\"[^\"]+\",([0-9]+,){3}\"[^\"]+\"\\}");
@@ -636,7 +636,7 @@ err_bad_fld:
 }
 
 
-bool db_1c_8x::root::parse_lock(const std::wstring& descr_)
+bool db_1cd_8x::root::parse_lock(const std::wstring& descr_)
 {
     const auto i_end = std::wsregex_iterator();
 
@@ -654,8 +654,8 @@ bool db_1c_8x::root::parse_lock(const std::wstring& descr_)
 }
 
 
-std::array<db_1c_8x::pages::index_type, 3>
-    db_1c_8x::root::parse_files(const std::wstring& descr_)
+std::array<db_1cd_8x::pages::index_type, 3>
+    db_1cd_8x::root::parse_files(const std::wstring& descr_)
 {
     const auto i_end = std::wsregex_iterator();
     std::array<pages::index_type, 3> result;
@@ -698,7 +698,7 @@ err_bad_file:
 }
 
 
-db_1c_8x::table::params db_1c_8x::root::parse_params(const std::wstring& descr_)
+db_1cd_8x::table::params db_1cd_8x::root::parse_params(const std::wstring& descr_)
 {
     table::params result;
 

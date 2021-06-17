@@ -72,21 +72,21 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\code\db_1c\ext\zlib;D:\code\db_1c\db_1c;$(IncludePath)</IncludePath>
+    <IncludePath>D:\code\db_1cd\ext\zlib;D:\code\db_1cd\db_1cd;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\code\db_1c\ext\zlib;D:\code\db_1c\db_1c;$(IncludePath)</IncludePath>
+    <IncludePath>D:\code\db_1cd\ext\zlib;D:\code\db_1cd\db_1cd;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\code\db_1c\ext\zlib;D:\code\db_1c\db_1c;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\code\db_1c\ext\zlib\x64_debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\code\db_1cd\ext\zlib;D:\code\db_1cd\db_1cd;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\code\db_1cd\ext\zlib\x64_debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\code\db_1c\ext\zlib;D:\code\db_1c\db_1c;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\code\db_1c\ext\zlib\x64_release;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\code\db_1cd\ext\zlib;D:\code\db_1cd\db_1cd;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\code\db_1cd\ext\zlib\x64_release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -157,14 +157,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\db_1c\db_1c_83.cpp" />
-    <ClCompile Include="..\..\db_1c\db_1c_8x.cpp" />
+    <ClCompile Include="..\..\db_1cd\db_1cd_83.cpp" />
+    <ClCompile Include="..\..\db_1cd\db_1cd_8x.cpp" />
     <ClCompile Include="users_list.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\db_1c\cache.h" />
-    <ClInclude Include="..\..\db_1c\db_1c_83.h" />
-    <ClInclude Include="..\..\db_1c\db_1c_8x.h" />
+    <ClInclude Include="..\..\db_1cd\cache.h" />
+    <ClInclude Include="..\..\db_1cd\db_1cd_83.h" />
+    <ClInclude Include="..\..\db_1cd\db_1cd_8x.h" />
     <ClInclude Include="..\..\ext\zlib\zlib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

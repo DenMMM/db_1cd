@@ -1,5 +1,5 @@
 # db_1cd
-This is part of a mini driver to read the 1C8 file database.
+This is part of a mini driver to read the 1CD file database.
 Supported format version 8.3.8.
 
 While development used additional resources:

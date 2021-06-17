@@ -1,5 +1,5 @@
 /*
-   Library for low-level access to 1C8 file database.
+   Library for low-level access to 1CD file database.
    Copyright (C) 2021 Denis Matveev (denm.mmm@gmail.com).
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,16 +22,16 @@
 #include <string>
 #include <optional>
 
-#include "db_1c_83.h"
+#include "db_1cd_83.h"
 
 
-std::optional<db_1c_83::table::params> find_table(db_1c_83::pages& pages_, const std::wstring& name_)
+std::optional<db_1cd_83::table::params> find_table(db_1cd_83::pages& pages_, const std::wstring& name_)
 {
-    db_1c_83::root root(pages_);
+    db_1cd_83::root root(pages_);
 
-    for (db_1c_83::root::index_type i = 0; i < root.size(); ++i)
+    for (db_1cd_83::root::index_type i = 0; i < root.size(); ++i)
     {
-        db_1c_83::table::params params = root.get(i);
+        db_1cd_83::table::params params = root.get(i);
 
         if (params.name == name_)
             return params;
@@ -53,8 +53,8 @@ int wmain(int argc, wchar_t* argv[])
     {
         std::setlocale(LC_ALL, "");
 
-        db_1c_83::pages pages(8);
-        const db_1c_83::pages::error err = pages.open(argv[1]);
+        db_1cd_83::pages pages(8);
+        const db_1cd_83::pages::error err = pages.open(argv[1]);
 
         if (!err)
         {
@@ -70,21 +70,21 @@ int wmain(int argc, wchar_t* argv[])
             return -1;
         }
 
-        db_1c_83::records records(
+        db_1cd_83::records records(
             pages,
             params->i_records,
             params->columns);
 
-        for (db_1c_83::records::index_type i = 0; i < records.size(); ++i)
+        for (db_1cd_83::records::index_type i = 0; i < records.size(); ++i)
         {
             records.seek(i);
 
             if (!records.is_deleted())
             {
-                auto field_name = records.get_field<db_1c_83::field::str_var>(
+                auto field_name = records.get_field<db_1cd_83::field::str_var>(
                     records.field_index(L"NAME"));
 
-                auto field_show = records.get_field<db_1c_83::field::boolean>(
+                auto field_show = records.get_field<db_1cd_83::field::boolean>(
                     records.field_index(L"SHOW"));
 
                 std::wcout
@@ -93,7 +93,7 @@ int wmain(int argc, wchar_t* argv[])
             }
         }
     }
-    catch (db_1c_83::exception& e)
+    catch (db_1cd_83::exception& e)
     {
         std::cout << "Internal error: " << e.what() << std::endl;
         return -1;

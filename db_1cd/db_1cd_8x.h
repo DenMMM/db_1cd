@@ -1,5 +1,5 @@
 /*
-   Library for low-level access to 1C8 file database.
+   Library for low-level access to 1CD file database.
    Copyright (C) 2021 Denis Matveev (denm.mmm@gmail.com).
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -101,10 +101,10 @@ root
 #include "cache.h"
 
 
-class db_1c_8x
+class db_1cd_8x
 {
 public:
-    db_1c_8x() = delete;
+    db_1cd_8x() = delete;
 
 
 public:
@@ -699,7 +699,7 @@ protected:
 
 
 template <typename Tobject_type>
-db_1c_8x::blob<Tobject_type>::blob(
+db_1cd_8x::blob<Tobject_type>::blob(
     pages& pages_, pages::index_type index_) :
     obj_iface(pages_, index_)
 {
@@ -716,8 +716,8 @@ db_1c_8x::blob<Tobject_type>::blob(
 
 
 template <typename Tobject_type>
-db_1c_8x::pages::buffer_type
-db_1c_8x::blob<Tobject_type>::get(
+db_1cd_8x::pages::buffer_type
+db_1cd_8x::blob<Tobject_type>::get(
     blob::index_type index_, std::size_t size_)
 {
     if (index_ == 0)
@@ -786,7 +786,7 @@ db_1c_8x::blob<Tobject_type>::get(
 
 
 template <typename Tobject_type>
-std::size_t db_1c_8x::records<Tobject_type>::prepare_fields(
+std::size_t db_1cd_8x::records<Tobject_type>::prepare_fields(
     const std::vector<field::fparams>& params_)
 {
     if (params_.size() > std::numeric_limits<field::index_type>::max())
@@ -844,7 +844,7 @@ std::size_t db_1c_8x::records<Tobject_type>::prepare_fields(
 
 
 template <typename Tobject_type>
-db_1c_8x::records<Tobject_type>::records(
+db_1cd_8x::records<Tobject_type>::records(
     pages& pages_,
     pages::index_type index_,
     const std::vector<field::fparams>& params_) :
@@ -867,7 +867,7 @@ db_1c_8x::records<Tobject_type>::records(
 
 
 template <typename Tobject_type>
-db_1c_8x::field::index_type db_1c_8x::records<Tobject_type>::field_index(
+db_1cd_8x::field::index_type db_1cd_8x::records<Tobject_type>::field_index(
     const std::wstring& name_) const
 {
     try
@@ -883,7 +883,7 @@ db_1c_8x::field::index_type db_1c_8x::records<Tobject_type>::field_index(
 
 
 template <typename Tobject_type>
-void db_1c_8x::records<Tobject_type>::seek(records::index_type index_)
+void db_1cd_8x::records<Tobject_type>::seek(records::index_type index_)
 {
     if (index_ >= size())
     {
@@ -907,7 +907,7 @@ void db_1c_8x::records<Tobject_type>::seek(records::index_type index_)
 
 
 template <typename Tobject_type>
-bool db_1c_8x::records<Tobject_type>::is_deleted() const
+bool db_1cd_8x::records<Tobject_type>::is_deleted() const
 {
     if (!seek_success())                                    /// assert() ?
     {
@@ -924,7 +924,7 @@ bool db_1c_8x::records<Tobject_type>::is_deleted() const
 
 template <typename Tobject_type>
 template <typename Tvalue_type>
-Tvalue_type db_1c_8x::records<Tobject_type>::get_field(field::index_type index_) const
+Tvalue_type db_1cd_8x::records<Tobject_type>::get_field(field::index_type index_) const
 {
     if (!seek_success())                                    /// assert() ?
     {

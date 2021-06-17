@@ -18,21 +18,21 @@
     <ClCompile Include="users_list.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\db_1c\db_1c_8x.cpp">
+    <ClCompile Include="..\..\db_1cd\db_1cdd_8x.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\db_1c\db_1c_83.cpp">
+    <ClCompile Include="..\..\db_1cd\db_1cdd_83.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\db_1c\cache.h">
+    <ClInclude Include="..\..\db_1cd\cache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\db_1c\db_1c_8x.h">
+    <ClInclude Include="..\..\db_1cd\db_1cdd_8x.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\db_1c\db_1c_83.h">
+    <ClInclude Include="..\..\db_1cd\db_1cdd_83.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ext\zlib\zlib.h">

@@ -1,5 +1,5 @@
 /*
-   Library for low-level access to 1C8 file database.
+   Library for low-level access to 1CD file database.
    Copyright (C) 2021 Denis Matveev (denm.mmm@gmail.com).
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +15,10 @@
    limitations under the License.
 */
 
-#include "db_1c_83.h"
+#include "db_1cd_83.h"
 
 
-db_1c_83::object::object(pages& pages_, pages::index_type index_) :
+db_1cd_83::object::object(pages& pages_, pages::index_type index_) :
     pages_iface(pages_)
 {
     if (pages_iface.version() != VERSION)
@@ -59,8 +59,8 @@ db_1c_83::object::object(pages& pages_, pages::index_type index_) :
 }
 
 
-db_1c_83::pages::index_type
-db_1c_83::object::page_num_to_index(pages::index_type page_num_)
+db_1cd_83::pages::index_type
+db_1cd_83::object::page_num_to_index(pages::index_type page_num_)
 {
     const auto page_size = pages_iface.page_size();
     const auto records_in_hdr = (page_size - sizeof(obj_hdr)) / sizeof(pages::index_type);
@@ -87,8 +87,8 @@ db_1c_83::object::page_num_to_index(pages::index_type page_num_)
 }
 
 
-db_1c_83::pages::index_type
-db_1c_83::object::page_num_to_index_lite(pages::index_type page_num_) const
+db_1cd_83::pages::index_type
+db_1cd_83::object::page_num_to_index_lite(pages::index_type page_num_) const
 {
     const auto page_size = pages_iface.page_size();
     const auto records_in_hdr = (page_size - sizeof(obj_hdr)) / sizeof(pages::index_type);
@@ -104,7 +104,7 @@ db_1c_83::object::page_num_to_index_lite(pages::index_type page_num_) const
 }
 
 
-void db_1c_83::object::read(void* dst_buff_, std::size_t count_, object::size_type pos_)
+void db_1cd_83::object::read(void* dst_buff_, std::size_t count_, object::size_type pos_)
 {
     auto *hdr = reinterpret_cast<const obj_hdr*>(hdr_page.data());
 
@@ -145,7 +145,7 @@ void db_1c_83::object::read(void* dst_buff_, std::size_t count_, object::size_ty
 }
 
 
-db_1c_83::root::root(pages& pages_) :
+db_1cd_83::root::root(pages& pages_) :
     blob_iface(pages_, 2)
 {
     hdr_data = blob_iface.get(1);
@@ -166,7 +166,7 @@ db_1c_83::root::root(pages& pages_) :
 }
 
 
-std::wstring db_1c_83::root::read(root::index_type num_)
+std::wstring db_1cd_83::root::read(root::index_type num_)
 {
     if (num_ >= size())
     {
