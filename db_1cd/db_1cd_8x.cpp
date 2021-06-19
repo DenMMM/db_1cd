@@ -38,7 +38,7 @@ std::string db_1cd_8x::file::error::to_string() const
 
 
 db_1cd_8x::file::error
-db_1cd_8x::file::open(const std::wstring &path_name_)
+db_1cd_8x::file::open(const std::wstring& path_name_)
 {
     assert(!is_valid());                                    // File already opened.
 
@@ -52,15 +52,18 @@ db_1cd_8x::file::open(const std::wstring &path_name_)
         nullptr);
 
     if (file_handle == INVALID_HANDLE_VALUE)
-    {
         return error(::GetLastError());
-    }
 
     LARGE_INTEGER li_size = { 0 };
 
     if (!::GetFileSizeEx(file_handle, &li_size))
     {
-        return error(::GetLastError());
+        const DWORD le = ::GetLastError();
+
+        ::CloseHandle(file_handle);
+        file_handle = INVALID_HANDLE_VALUE;
+
+        return error(le);
     }
 
     file_size = li_size.QuadPart;
@@ -99,28 +102,25 @@ db_1cd_8x::file::read(void* dst_buff_, std::size_t count_, file::size_type pos_)
 }
 
 
-db_1cd_8x::file::error
-db_1cd_8x::file::close()
+db_1cd_8x::file&
+db_1cd_8x::file::operator=(file&& src_) noexcept
 {
-    assert(is_valid());                                     // File not opened.
+    if (file_handle != INVALID_HANDLE_VALUE)                /// assert() ?
+        ::CloseHandle(file_handle);
 
-    if (!::CloseHandle(file_handle))
-    {
-        return error(::GetLastError());
-    }
+    file_handle = src_.file_handle;
+    src_.file_handle = INVALID_HANDLE_VALUE;
 
-    file_handle = INVALID_HANDLE_VALUE;
+    file_size = src_.file_size;
 
-    return {};
+    return *this;
 }
 
 
 db_1cd_8x::file::~file()
 {
     if (file_handle != INVALID_HANDLE_VALUE)
-    {
         ::CloseHandle(file_handle);
-    }
 }
 
 
@@ -161,24 +161,23 @@ db_1cd_8x::pages::open(const std::wstring& path_name_)
 {
     assert(!is_valid());                                    // File already opened.
 
+    file tmp_iface;
     file::error fe;
 
-    if (!(fe = file_iface.open(path_name_)) ||
-        !(fe = file_iface.read(&db_hdr, sizeof(db_hdr), 0)))
+    if (!(fe = tmp_iface.open(path_name_)) ||
+        !(fe = tmp_iface.read(&db_hdr, sizeof(db_hdr), 0)))
     {
         return error(fe);
     }
 
     if (std::memcmp("1CDBMSV8", db_hdr.sig, 8) != 0)
     {
-        file_iface.close();
         return error(errors::bad_file);
     }
 
     if (db_hdr.version != 0x000E0208 &&
         db_hdr.version != 0x00080308)
     {
-        file_iface.close();
         return error(errors::version);
     }
 
@@ -193,21 +192,21 @@ db_1cd_8x::pages::open(const std::wstring& path_name_)
         db_hdr.page_size != 32768 &&
         db_hdr.page_size != 65536)
     {
-        file_iface.close();
         return error(errors::bad_file);
     }
 
-    const auto file_size = file_iface.size();
+    const auto file_size = tmp_iface.size();
 
     if ((file_size % db_hdr.page_size) != 0 ||
         (file_size / db_hdr.page_size) != db_hdr.length ||
         db_hdr.length == 0)
     {
-        file_iface.close();
         return error(errors::bad_file);
     }
 
     cache_init(db_hdr.page_size);
+
+    file_iface = std::move(tmp_iface);
 
     return {};
 }

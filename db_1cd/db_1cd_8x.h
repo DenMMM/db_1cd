@@ -154,7 +154,6 @@ private:
 
         error open(const std::wstring &path_name_);
         error read(void *dst_buff_, std::size_t count_, file::size_type pos_) const;
-        error close();
 
         file::size_type size() const noexcept
         {
@@ -169,9 +168,13 @@ private:
         }
         
         file(const file&) = delete;
-        file(file&&) = delete;
+        file(file&& src_) noexcept
+        {
+            *this = std::move(src_);
+        }
+
         file& operator=(const file&) = delete;
-        file& operator=(file&&) = delete;
+        file& operator=(file&& src_) noexcept;
 
         ~file();
     };
@@ -301,9 +304,9 @@ public:
         }
 
         pages(const pages&) = delete;
-        pages(pages&&) = delete;
+        pages(pages&&) = default;
         pages& operator=(const pages&) = delete;
-        pages& operator=(pages&&) = delete;
+        pages& operator=(pages&&) = default;
     };
 
 

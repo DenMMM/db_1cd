@@ -141,9 +141,9 @@ namespace cache
         }
 
         fifo(const fifo&) = delete;
-        fifo(fifo&&) noexcept = default;
+        fifo(fifo&&) = default;
         fifo& operator=(const fifo&) = delete;
-        fifo& operator=(fifo&&) noexcept = default;
+        fifo& operator=(fifo&&) = default;
     };
 
 
@@ -251,9 +251,9 @@ namespace cache
         }
 
         lru(const lru&) = delete;
-        lru(lru&&) noexcept = default;
+        lru(lru&&) = default;
         lru& operator=(const lru&) = delete;
-        lru& operator=(lru&&) noexcept = default;
+        lru& operator=(lru&&) = default;
     };
 
 
@@ -328,9 +328,9 @@ namespace cache
         }
 
         twoq(const twoq&) = delete;
-        twoq(twoq&&) noexcept = default;
+        twoq(twoq&&) = default;
         twoq& operator=(const twoq&) = delete;
-        twoq& operator=(twoq&&) noexcept = default;
+        twoq& operator=(twoq&&) = default;
     };
 
 }
