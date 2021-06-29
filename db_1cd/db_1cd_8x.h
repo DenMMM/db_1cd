@@ -168,9 +168,12 @@ private:
         }
         
         file(const file&) = delete;
-        file(file&& src_) noexcept
+
+        file(file&& src_) noexcept :
+            file_handle(src_.file_handle),
+            file_size(src_.file_size)
         {
-            *this = std::move(src_);
+            src_.file_handle = INVALID_HANDLE_VALUE;
         }
 
         file& operator=(const file&) = delete;
