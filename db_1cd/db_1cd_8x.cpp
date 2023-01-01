@@ -558,22 +558,16 @@ db_1cd_8x::field::datetime::datetime(
 
 std::wstring db_1cd_8x::root::parse_name(const std::wstring& descr_)
 {
-    const auto i_end = std::wsregex_iterator();
+    thread_local const std::wregex rgxp_name(LR"_(^\{"([^"]+)")_");
+    std::wsmatch name_match;
 
-    thread_local const std::wregex rgxp_name(L"^\\{\"[^\"]+\"");
-    auto i_name = std::wsregex_iterator(descr_.begin(), descr_.end(), rgxp_name);
-
-    if (i_name == i_end)
+    if (!std::regex_search(descr_, name_match, rgxp_name))
     {
         throw exception(
             "Table name not found in table description.");
     }
 
-    std::wstring result(i_name->str());
-    result.pop_back();
-    result.erase(0, 2);
-
-    return result;
+    return name_match[1].str();
 }
 
 
@@ -581,8 +575,7 @@ std::vector<db_1cd_8x::field::fparams>
     db_1cd_8x::root::parse_fields(const std::wstring& descr_)
 {
     const auto i_end = std::wsregex_iterator();
-    thread_local const std::wregex rgxp_fields(L"^\\{\"[^\"]+\",\"[^\"]+\",([0-9]+,){3}\"[^\"]+\"\\}");
-    thread_local const std::wregex rgxp_params(L"[^,\\{\\}\"]+");
+    thread_local const std::wregex rgxp_fields(LR"_(^\{"([^"]+)","([^"]+)",([0-9]+),([0-9]+),([0-9]+),"([^"]+)"\})_");
     thread_local const std::map<std::wstring, field::ftype> value_types{
         {L"B",          field::ftype::binary},
         {L"L",          field::ftype::boolean},
@@ -602,20 +595,16 @@ std::vector<db_1cd_8x::field::fparams>
     for (auto i_field = std::wsregex_iterator(descr_.begin(), descr_.end(), rgxp_fields);
         i_field != i_end; ++i_field)
     {
-        const std::wstring field_str(i_field->str());
-        auto i_param = std::wsregex_iterator(field_str.begin(), field_str.end(), rgxp_params);
-
         auto& field = result.emplace_back();
 
         try
         {
-            if (i_param == i_end) goto err_bad_fld; field.name = (i_param++)->str();
-            if (i_param == i_end) goto err_bad_fld; field.type = value_types.at((i_param++)->str());
-            if (i_param == i_end) goto err_bad_fld; field.null_exists = (std::stoul((i_param++)->str()) == 0) ? false : true;
-            if (i_param == i_end) goto err_bad_fld; field.length = std::stoul((i_param++)->str());
-            if (i_param == i_end) goto err_bad_fld; field.precision = std::stoul((i_param++)->str());
-            if (i_param == i_end) goto err_bad_fld; field.case_sens = case_sens.at((i_param++)->str());
-            if (i_param != i_end) goto err_bad_fld;
+            field.name = (*i_field)[1].str();
+            field.type = value_types.at((*i_field)[2].str());
+            field.null_exists = (std::stoul((*i_field)[3].str()) == 0) ? false : true;
+            field.length = std::stoul((*i_field)[4].str());
+            field.precision = std::stoul((*i_field)[5].str());
+            field.case_sens = case_sens.at((*i_field)[6].str());
         }
         catch (std::out_of_range&)
         {
@@ -637,48 +626,38 @@ err_bad_fld:
 
 bool db_1cd_8x::root::parse_lock(const std::wstring& descr_)
 {
-    const auto i_end = std::wsregex_iterator();
+    thread_local const std::wregex rgxp_lock(LR"_(^\{"Recordlock","([0-9])"\})_");
+    std::wsmatch lock_match;
 
-    thread_local const std::wregex rgxp_lock(L"^\\{\"Recordlock\",\"[0-9]\"\\}");
-    auto i_lock = std::wsregex_iterator(descr_.begin(), descr_.end(), rgxp_lock);
-
-    if (i_lock == i_end)
+    if (!std::regex_search(descr_, lock_match, rgxp_lock))
     {
         throw exception(
             "Not found 'Recordlock' parameter in table description.");
     }
 
-    const std::wstring lock_str(i_lock->str());
-    return lock_str.at(15) == L'1' ? true : false;
+    return lock_match[1].str() == L"1" ? true : false;
 }
 
 
 std::array<db_1cd_8x::pages::index_type, 3>
-    db_1cd_8x::root::parse_files(const std::wstring& descr_)
+db_1cd_8x::root::parse_files(const std::wstring& descr_)
 {
-    const auto i_end = std::wsregex_iterator();
     std::array<pages::index_type, 3> result;
 
-    thread_local const std::wregex rgxp_files(L"^\\{\"Files\"(,[0-9]+){3}\\}");
-    auto i_files = std::wsregex_iterator(descr_.begin(), descr_.end(), rgxp_files);
+    thread_local const std::wregex rgxp_files(LR"_(^\{"Files",([0-9]+),([0-9]+),([0-9]+)\})_");
+    std::wsmatch files_match;
 
-    if (i_files == i_end)
+    if (!std::regex_search(descr_, files_match, rgxp_files))
     {
         throw exception(
             "Not found table files parameters in table description.");
     }
 
-    const std::wstring files_str(i_files->str());
-
-    thread_local const std::wregex rgxp_file(L"[0-9]+");
-    auto i_file = std::wsregex_iterator(files_str.begin(), files_str.end(), rgxp_file);
-
     try
     {
-        if (i_file == i_end) goto err_bad_file; result[0] = std::stoul((i_file++)->str());
-        if (i_file == i_end) goto err_bad_file; result[1] = std::stoul((i_file++)->str());
-        if (i_file == i_end) goto err_bad_file; result[2] = std::stoul((i_file++)->str());
-        if (i_file != i_end) goto err_bad_file;
+        result[0] = std::stoul(files_match[1].str());
+        result[1] = std::stoul(files_match[2].str());
+        result[2] = std::stoul(files_match[3].str());
     }
     catch (std::out_of_range&)
     {
