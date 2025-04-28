@@ -11,3 +11,7 @@ While development used additional resources:
 
 Часть мини-драйвера для чтения файловой базы 1СD.
 Поддерживается формат версии 8.3.8.
+
+
+Предистория появления проекта:
+* https://drive.google.com/drive/folders/16-zF6fM-UGHDShn1o0e0SBzdslgTqRgo
